@@ -1,0 +1,41 @@
+{
+    "main_menu.no_start_message": "No start message :(. Please write me later.",
+    "main_menu.menu": "Главное меню",
+    "main_menu.categories": "Посмотреть",
+    "main_menu.favorites": "Избранное",
+    "main_menu.contacts": "Контакты",
+    "main_menu.upload": "Добавить файл",
+    "main_menu.share": "Поделиться",
+    "main_menu.search": "Поиск",
+
+    "contacts.no_contacts": "Контакты ещё не указаны",
+
+    "share.no_share_text": "Информация не указана",
+
+    "catalog.categories.select": "Выберите категорию",
+    "catalog.categories.empty": "Каталог пуст",
+    "catalog.add_favorite.add": "В избранное ❤",
+    "catalog.add_favorite.remove": "Удалить из избранного",
+    "catalog.add_favorite.added": "Файл добавлен в избранное!",
+    "catalog.add_favorite.removed": "Файл удалён из избранного!",
+    "catalog.add_favorite.error": "Ошибка!",
+    "catalog.add_favorite.not_allowed": "У вас нет доступа!",
+    "catalog.files.select": "Выберите файл",
+    "catalog.from_users": "От пользователей",
+    "catalog.from_users.empty": "Ещё нет файлов от пользователей",
+
+    "favorites.empty": "Ваш список избранного пуст",
+
+    "user_files.too_much_size": "Слишком большой размер файла. Максимальный размер файла не должен превышать 1 мегабайта",
+    "user_files.wait": "Ваш файл сохраняется...",
+    "user_files.success": "Спасибо за ваш файл, он отправлен на модерацию и появится в категории \"От пользователей\" только после подтверждения",
+    "user_files.error": "Во время сохранения файла произошла ошибка, пожалуйста, попробуйте позже",
+    "user_files.caption_empty": "Вы не указали описание к файлу, это необходимо",
+    "user_files.help_text": "Отправьте боту звук, который вы хотите загрузить. Принимаются аудио, размер не больше 1 мб.",
+    "user_files.type_file_name": "Напишите и запомните название файла, что бы найти его через поиск.",
+
+    "search.type_query": "Введите искомое имя файла",
+    "search.not_found": "Файлы не найдены",
+
+    "back": "Назад \uD83D\uDD19"
+}

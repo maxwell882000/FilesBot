@@ -1,0 +1,130 @@
+{% extends 'layouts/app.html' %}
+{% block title %}{{ object.file_name }}{% endblock %}
+{% block breadcrumbs %}
+    <a href="{% url 'admin-catalog' %}" class="breadcrumb-item">Каталог</a>
+    <span class="breadcrumb-item active">{{ object.file_name }}</span>
+{% endblock %}
+{% block content %}
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="block">
+            <div class="block-header block-header-default">
+                <h3 class="block-title">{{ file.full_file_name }} {% if file.is_user_file %} <small>От пользователя {{ file.user.first_name }}{% if file.user.last_name %}{{ file.user.last_name }}{% endif %}{% if file.user.username %} | {{ file.user.username }}{% endif %}</small> {% endif %}</h3>
+                <div class="block-options">
+                    <button type="submit" class="btn btn-sm btn-alt-primary"><i class="si si-check mr-5"></i>Сохранить</button>
+                    {% if file.is_user_file and not file.confirmed %}
+                        <a href="{% url 'admin-catalog-userfiles-confirm' pk=file.id %}"
+                           class="btn btn-sm btn-alt-info"><i class="si si-check mr-5"></i> Подтвердить</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group {% if form.name.errors %}is-invalid{% endif %}">
+                            <div class="form-material form-material-primary floating">
+                                <input type="text" name="name" id="name" class="form-control" value="{{ file.name }}">
+                                <label for="name">Название файла</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group {% if form.file.errors %}is-invalid{% endif %}">
+                            <div class="form-material form-material-primary">
+                                <input type="file" name="files" id="{{ form.file.id_for_label }}" class="form-control">
+                                <label for="{{ form.file.id_for_label }}">Файл</label>
+                            </div>
+                            {% for error in form.file.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        {% if file.extension == '.pdf' %}
+                            <a href="{{ file.file_url }}" class="link-effect" target="_blank"><i class="fa fa-file-pdf-o mr-10 fa-2x"></i>{{ file.full_file_name }}</a>
+                        {% elif file.extension == '.doc' or file.extension == '.docx' %}
+                            <a href="{{ file.file_url }}" class="link-effect" target="_blank"><i class="fa fa-file-word-o mr-10 fa-2x"></i>{{ file.full_file_name }}</a>
+                        {% elif file.extension == '.xls' or file.extension == '.xlsx' %}
+                            <a href="{{ file.file_url }}" class="link-effect" target="_blank"><i class="fa fa-file-excel-o mr-10 fa-2x"></i>{{ file.full_file_name }}</a>
+                        {% elif file.extension == '.mp3' %}
+                            <a href="{{ file.file_url }}" class="link-effect" target="_blank"><i class="fa fa-file-audio-o mr-10 fa-2x"></i>{{ file.full_file_name }}</a>
+                        {% elif file.extension == '.txt' %}
+                            <a href="{{ file.file_url }}" class="link-effect" target="_blank"><i class="fa fa-file-text-o mr-10 fa-2x"></i>{{ file.full_file_name }}</a>
+                        {% elif file.extension == '.jpg' or file.extension == '.png' %}
+                            <div class="options-container">
+                                <img src="{{ file.file_url }}" alt="" class="img-fluid options-item">
+                                <div class="options-overlay bg-black-op-75">
+                                    <div class="options-overlay-content">
+                                        <span><i class="fa fa-file-image-o mr-10 fa-2x"></i>{{ file.full_file_name }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                         {% else %}
+                            <span><i class="fa fa-file-o mr-10 fa-2x"></i>{{ file.full_file_name }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group {% if form.category.errors %}is-invalid{% endif %}">
+                            <div class="form-material form-material-primary">
+                                {{ form.category }}
+                                <label for="{{ form.category.id_for_label }}">Категория</label>
+                            </div>
+                            {% for error in form.category.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group {% if form.caption.errors %}is-invalid{% endif %}">
+                            <div class="form-material form-material-primary floating">
+                                <textarea name="caption" id="{{ form.caption.id_for_label }}" cols="" rows="3"
+                                          class="form-control">{{ file.caption }}</textarea>
+                                <label for="{{ form.caption.id_for_label }}">Описание</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-4">
+                        <label class="css-control css-control-primary css-checkbox">
+                            <input type="checkbox" class="css-control-input" name="hide_file_name" {% if not file.hide_file_name %} checked {% endif %}>
+                            <span class="css-control-indicator"></span>Показывать стандартное имя файла</label>
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                        <div class="form-group">
+                            <label class="css-control css-control-primary css-checkbox">
+                                <input type="checkbox" name="unprintable_file_name" id="{{ form.unprintable_file_name.id_for_label }}" class="css-control-input" {% if file.unprintable_file_name %} checked {% endif %}>
+                                <span class="css-control-indicator"></span>Нецензурное выражение (заменит имя файла на "цензура")
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                        <div class="form-group">
+                            <label class="css-control css-control-primary css-checkbox">
+                                <input type="checkbox" name="is_user_file" id="{{ form.is_user_file.id_for_label }}" {% if file.is_user_file %}checked{% endif %} class="css-control-input">
+                                <span class="css-control-indicator"></span>Создать как пользователький файл
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+{% block scripts %}
+    <script>
+        let categorySelect = $('select#id_category');
+        categorySelect.addClass('form-control');
+        let categoryId = "{{ object.category.id }}";
+        let selectOptions = categorySelect.children();
+        for (let i = 0; i < selectOptions.length; i++) {
+            let option = $(selectOptions[i]);
+            option.removeAttr('selected');
+                if (option.attr('value') === categoryId) {
+                    option.attr('selected', 'selected');
+                }
+        }
+    </script>
+{% endblock %}

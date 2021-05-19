@@ -1,0 +1,64 @@
+{% extends 'layouts/app.html' %}
+{% block title %}
+    Файлы пользователей
+{% endblock %}
+{% block breadcrumbs %}
+    <a href="{% url 'admin-catalog' %}" class="breadcrumb-item">Каталог</a>
+    <span class="breadcrumb-item active">Файлы пользователей</span>
+{% endblock %}
+{% block styles %}
+    <style>
+        audio {
+            height: 30px;
+        }
+        audio:focus {
+            outline: none;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="block">
+        <div class="block-header block-header-default">
+            <h3 class="block-title">Файлы пользователей</h3>
+        </div>
+        <div class="block-content block-content-full">
+            {% if files %}
+                <div class="table-responsive">
+                    <table class="table table-vcenter">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Название</th>
+                                <th class="text-center">Пользователь</th>
+                                <th class="text-center">Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for file in files %}
+                                <tr>
+                                    <td class="text-center {% if file.extension == '.mp3' %}d-flex justify-content-center align-items-center{% endif %}">{{ file.file_name }} {% if file.extension == '.mp3' %}
+                                        <audio controls src="{{ file.file_url }}" class="ml-15"></audio> {% endif %}</td>
+                                    <td class="text-center">{{ file.user.first_name }}{% if file.user.last_name %}{{ file.user.last_name }}{% endif %}{% if file.user.username %} | {{ file.user.username }}{% endif %}</td>
+                                    <td class="text-center d-flex justify-content-center align-items-center">
+                                        <a href="{% url 'admin-catalog-files-edit' pk=file.id %}" class="btn btn-sm btn-alt-info mr-10" data-toggle="tooltip" title="Редактировать"><i class="si si-pencil"></i></a>
+                                        {% if not file.confirmed %}
+                                            <a href="{% url 'admin-catalog-userfiles-confirm' pk=file.id %}" class="btn btn-sm btn-alt-info mr-10" data-toggle="tooltip" title="Одобрить"><i class="si si-check"></i></a>
+                                        {% endif %}
+                                        <form action="{% url 'admin-catalog-files-remove' pk=file.id %}" method="post">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-alt-danger" onclick="return confirm('Вы уверены?')" data-toggle="tooltip" title="Удалить"><i class="si si-trash"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="py-30 text-center">
+                    <i class="si si-ghost text-primary display-3"></i>
+                    <p class="mt-20 font-size-h5">Ещё нет ни одного файла от пользователей</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
